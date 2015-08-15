@@ -1,6 +1,10 @@
 class OrdersController < ApplicationController
   before_filter :authenticate_user!
-  # before_action :set_order, only: [:show]
+  before_action :set_order, only: [:show, :deliver]
+
+  def index
+    @orders = Order.unassigned.all
+  end
 
   def new
   end
@@ -17,14 +21,21 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.find(params[:id])
+  end
+
+  # GET /orders/:id/deliver
+  def deliver
+    @order.deliverer = current_user
+    @order.status = 'assigned'
+    @order.save
+    redirect_to user_deliveries_path, notice: 'Order was successfully assigned.'
   end
 
   private
     # # Use callbacks to share common setup or constraints between actions.
-    # def set_order
-    #   @order = Order.find(current_customer.id)
-    # end
+    def set_order
+      @order = Order.find(params[:id])
+    end
 
     def order_params
       params.require(:order).permit(:tips)

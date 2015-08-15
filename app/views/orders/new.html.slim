@@ -7,13 +7,14 @@
     = text_field :item, :quantity, class:"form-control", required:true
   div.form-group
     = label :item, :estimated_price, "Estimated Price"
-    = text_field :item, :estimated_price, class:"form-control", required:true
+    div.input-group
+      div.input-group-addon $
+      = text_field :item, :estimated_price, class:"form-control", required:true
   div.form-group
     = label :order, :tips, "Tips"
     div.input-group
       div.input-group-addon $
       = text_field :order, :tips, class:"form-control", required:true
-      div.input-group-addon .00
   div.form-group
     = label :location, :address, "Purchase From"
     = text_field :location, :address, class:"form-control purchase-addr", required:true

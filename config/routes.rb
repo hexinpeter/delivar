@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   root to: 'users#index'
-  devise_for :users
-  resources :users
 
-  resources :orders
+  devise_for :users
+  get 'users/index', to: 'users#index'
+  get 'users/show', to: 'users#show'
+  get 'users/deliveries', to: 'users#deliveries', as: 'user_deliveries'
+
+  resources :orders do
+    member do
+      get 'deliver'
+    end
+  end
 end
