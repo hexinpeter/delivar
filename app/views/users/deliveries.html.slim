@@ -2,7 +2,7 @@ h1 My Assigned Deliveries
 - @orders.each do |order|
   div.panel.panel-default
     div.panel-heading
-      h3 = order.user.name
+      h3 = order.user.name + " ( contact: " + order.user.phone + " )"
     div.panel-body
       - item = order.items.first
       p

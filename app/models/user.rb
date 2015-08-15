@@ -4,6 +4,6 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_one :order
+  has_many :orders
   has_many :deliveries, class_name: 'Order', foreign_key: 'deliverer_id'
 end

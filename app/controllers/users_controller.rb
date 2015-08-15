@@ -16,6 +16,11 @@ class UsersController < ApplicationController
     @orders = @user.deliveries
   end
 
+  def orders
+    @user = current_user
+    @orders = @user.orders
+  end
+
   private
     # # Use callbacks to share common setup or constraints between actions.
     def set_user

@@ -403,3 +403,4 @@
         oninitialized: function (component) {}
     }
 }( jQuery ));
+console.log('location picker loaded');

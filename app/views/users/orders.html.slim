@@ -1,0 +1,35 @@
+h1 My Orders
+- @orders.each do |order|
+  div.panel.panel-default
+    - item = order.items.first
+    div.panel-heading
+      h3
+        = item.name + " ( " + item.quantity + " )"
+    div.panel-body
+      - purchase_loc = Location.find(order.trip.start_location_id)
+      p
+        | Purchase From:&nbsp;
+        = purchase_loc.address
+      - delivery_loc = Location.find(order.trip.end_location_id)
+      p
+        | Delivery To:&nbsp;
+        = delivery_loc.address
+      p
+        | Tips: $
+        = order.tips.to_s + ' '
+        | Estimated Price: $
+        = item.estimated_price
+    div.panel-footer
+      p
+        | Status:&nbsp;
+        = order.status
+      - if order.status == 'assigned'
+        h5
+          | Deliverer:&nbsp;
+          = order.deliverer.name
+        h5
+          | Contact:&nbsp;
+          = order.deliverer.phone
+        = link_to "Confirm Receiving", '#', class: "btn btn-success"
+      - if order.status == 'unassigned'
+        = link_to "Cancel Delivery", '#', class: "btn btn-warning"
