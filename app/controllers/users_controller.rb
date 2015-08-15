@@ -31,5 +31,5 @@ class UsersController < ApplicationController
         redirect_to :index, :alert => "Access denied."
       end
     end
->>>>>>> origin/delivery
+
 end
