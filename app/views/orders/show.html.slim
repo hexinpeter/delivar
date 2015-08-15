@@ -1,0 +1,8 @@
+div.container
+  p = @order.inspect
+  p = @order.items.first.inspect
+  p = Location.find(@order.trip.start_location_id).inspect
+  p = Location.find(@order.trip.end_location_id).inspect
+
+  p tips:
+    = @order.tips

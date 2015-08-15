@@ -5,6 +5,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :quantity
       t.float :estimated_price
       t.float :actual_price
+      t.belongs_to :order, index: true
 
       t.timestamps null: false
     end

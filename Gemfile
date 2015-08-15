@@ -7,7 +7,10 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
+
 gem 'pg'
+gem 'slim'
+gem 'simple_form'
 
 group :development, :test do
   gem 'byebug'
