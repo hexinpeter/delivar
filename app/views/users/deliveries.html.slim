@@ -1,0 +1,27 @@
+h1 My Assigned Deliveries
+- @orders.each do |order|
+  div.panel.panel-default
+    div.panel-heading
+      h3 = order.user.name
+    div.panel-body
+      - item = order.items.first
+      p
+        | wants to buy&nbsp;
+        = item.name + ' '
+        | with quantity of&nbsp;
+        = item.quantity
+      - purchase_loc = Location.find(order.trip.start_location_id)
+      p
+        | Purchase From:&nbsp;
+        = purchase_loc.address
+      - delivery_loc = Location.find(order.trip.end_location_id)
+      p
+        | Delivery To:&nbsp;
+        = delivery_loc.address
+      p
+        | Tips: $
+        = order.tips.to_s + ' '
+        | Estimated Price: $
+        = item.estimated_price
+    div.panel-footer
+      = link_to "Cancel Delivery", '#', class: "btn btn-default"
