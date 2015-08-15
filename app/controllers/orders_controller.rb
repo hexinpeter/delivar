@@ -6,6 +6,26 @@ class OrdersController < ApplicationController
     @orders = Order.unassigned.all
   end
 
+  def search
+    current_loc = Location.create(purchase_location_params)
+    destination = Location.create( longitude: delivery_location_params[:longitude_to],
+                                    latitude:  delivery_location_params[:latitude_to],
+                                    address:   delivery_location_params[:address_to])
+    delivery_trip = Trip.new(start_location_id: current_loc.id, end_location_id: destination.id)
+
+    @orders = Order.unassigned.all.sort do |x, y|
+                x_trip_distance = x.trip.distance(delivery_trip)
+                y_trip_distance = y.trip.distance(delivery_trip)
+                p "\n\n\n\n\n"
+                p x_trip_distance, x.inspect
+                p y_trip_distance, y.inspect
+                p "\n\n\n\n\n"
+                y_trip_distance <=> x_trip_distance
+              end
+
+    render :index
+  end
+
   def new
   end
 

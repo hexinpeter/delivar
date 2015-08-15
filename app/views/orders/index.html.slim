@@ -1,4 +1,36 @@
 h1 Available Orders
+br
+= form_tag search_orders_path
+  div.form-group
+    = label :location, :address, "Travelling From"
+    = text_field :location, :address, class:"form-control purchase-addr", required:true
+  div.form-group.hidden
+    = label :location, :longitude, class: "col-sm-1"
+    div.col-sm-3
+      = text_field :location, :longitude, class: "form-control purchase-lon", required:true
+    = label :location, :latitude, class: "col-sm-1"
+    div.col-sm-3
+      = text_field :location, :latitude, class: "form-control purchase-lat", required:true
+
+  div.form-group
+    = label :location, :address_to, "Destination"
+    = text_field :location, :address_to, class:"form-control deliver-addr", required:true
+  div.form-group.hidden
+    = label :location, :longitude_to, class: "col-sm-1"
+    div.col-sm-3
+      = text_field :location, :longitude_to, class: "form-control deliver-lon", required:true
+    = label :location, :latitude_to, class: "col-sm-1"
+    div.col-sm-3
+      = text_field :location, :latitude_to, class: "form-control deliver-lat", required:true
+
+  = submit_tag 'Find My Customised Orders', class: "btn btn-default"
+
+div.hidden id="purchase" style="width: 500px; height: 400px;"
+div.hidden id="deliver" style="width: 500px; height: 400px;"
+
+br
+br
+
 - @orders.each do |order|
   div.panel.panel-default
     div.panel-heading
@@ -25,3 +57,27 @@ h1 Available Orders
         = item.estimated_price
     div.panel-footer
       = link_to "I'll Deliver", deliver_order_path(order), class: "btn btn-default"
+
+
+javascript:
+  $('#purchase').locationpicker({
+    location: {latitude: -37.8239402221389, longitude: 144.9911028355707},
+    radius: 3,
+    inputBinding: {
+          latitudeInput: $('.purchase-lat'),
+          longitudeInput: $('.purchase-lon'),
+          locationNameInput: $('.purchase-addr')
+      },
+    enableAutocomplete: true,
+  });
+
+  $('#deliver').locationpicker({
+    location: {latitude: -37.8239402221389, longitude: 144.9911028355707},
+    radius: 3,
+    inputBinding: {
+          latitudeInput: $('.deliver-lat'),
+          longitudeInput: $('.deliver-lon'),
+          locationNameInput: $('.deliver-addr')
+      },
+    enableAutocomplete: true,
+  });
