@@ -13,4 +13,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def account
+    @account = Account.where(user_id: current_user.id).first
+    if @account == nil
+      @account = Account.create(balance: 0, user_id: current_user.id)
+    end
+  end
+
 end

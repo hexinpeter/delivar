@@ -13,11 +13,39 @@ class OrdersController < ApplicationController
                                     latitude:  delivery_location_params[:latitude_to],
                                     address:   delivery_location_params[:address_to])
     trip = @order.create_trip(start_location_id: purchase_loc.id, end_location_id: delivery_loc.id)
-    redirect_to @order, notice: 'Order was successfully created.'
+    redirect_to pay @order
   end
 
   def show
     @order = Order.find(params[:id])
+  end
+
+  def pay order
+    values = {
+        business: "adrian_sutanahadi-facilitator@hotmail.com",
+        cmd: "_xclick",
+        upload: 1,
+        return: "#{ENV["DOMAIN_NAME"]}/orders/#{order.id}",
+        invoice: order.id,
+        amount: order.items.first.estimated_price + order.tips,
+        item_name: order.items.first.name,
+        quantity: '1',
+        notify_url: "#{ENV["DOMAIN_NAME"]}/hook"
+    }
+    "https://www.sandbox.paypal.com/cgi-bin/webscr?" + values.to_query 
+  end
+
+  protect_from_forgery except: [:hook]
+  def hook
+    params.permit! # Permit all Paypal input params
+    status = params[:payment_status]
+    if status == "Completed"
+      @order = Order.find params[:invoice]
+      @order.update_attributes status: 'Unassigned'
+      @order.user.account.balance += params[:mc_gross]
+      transaction = Transaction.create type: 'Credit', paymentID: params[:txn_id], account_id: @order.user.account.id
+    end
+    render nothing: true
   end
 
   private
