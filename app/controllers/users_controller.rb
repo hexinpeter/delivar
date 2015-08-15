@@ -2,7 +2,8 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-    @users = User.all
+    redirect_to new_user_session_path if !user_signed_in?
+    @user = current_user
   end
 
   def show
