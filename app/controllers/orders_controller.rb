@@ -1,3 +1,11 @@
+
+require 'braintree'
+
+  Braintree::Configuration.environment = :sandbox
+  Braintree::Configuration.merchant_id = 'ffdqc9fyffn7yn2j'
+  Braintree::Configuration.public_key = 'qj65nndbnn6qyjkp'
+  Braintree::Configuration.private_key = 'a3de3bb7dddf68ed3c33f4eb6d9579ca'
+
 class OrdersController < ApplicationController
   before_filter :authenticate_user!
   before_action :set_order, only: [:show, :deliver]
@@ -27,6 +35,7 @@ class OrdersController < ApplicationController
   end
 
   def new
+    @client_token = Braintree::ClientToken.generate
   end
 
   def create
@@ -51,33 +60,44 @@ class OrdersController < ApplicationController
     redirect_to user_deliveries_path, notice: 'Order was successfully assigned.'
   end
 
-  def pay order
-    values = {
-        business: "adrian_sutanahadi-facilitator@hotmail.com",
-        cmd: "_xclick",
-        upload: 1,
-        return: "#{ENV["DOMAIN_NAME"]}/orders/#{order.id}",
-        invoice: order.id,
-        amount: order.items.first.estimated_price + order.tips,
-        item_name: order.items.first.name,
-        quantity: '1',
-        notify_url: "#{ENV["DOMAIN_NAME"]}/hook"
-    }
-    "https://www.sandbox.paypal.com/cgi-bin/webscr?" + values.to_query 
+
+  # def pay order
+  #   values = {
+  #       business: "adrian_sutanahadi-facilitator@hotmail.com",
+  #       cmd: "_xclick",
+  #       upload: 1,
+  #       return: "#{ENV["DOMAIN_NAME"]}/orders/#{order.id}",
+  #       invoice: order.id,
+  #       amount: order.items.first.estimated_price + order.tips,
+  #       item_name: order.items.first.name,
+  #       quantity: '1',
+  #       notify_url: "#{ENV["DOMAIN_NAME"]}/hook"
+  #   }
+  #   "https://www.sandbox.paypal.com/cgi-bin/webscr?" + values.to_query 
+  # end
+
+  def confirm_delivery order
+    order.status = 'Completed'
+    order.user.account.balance -= order.items.first.estimated_price + order.tips
+    order.deliverer.account.balance += order.items.first.estimated_price + order.tips
+    order.save
+    redirect_to user_orders_path, notice: 'Order was successfully completed'
   end
 
-  protect_from_forgery except: [:hook]
-  def hook
-    params.permit! # Permit all Paypal input params
-    status = params[:payment_status]
-    if status == "Completed"
-      @order = Order.find params[:invoice]
-      @order.update_attributes status: 'Unassigned'
-      @order.user.account.balance += params[:mc_gross]
-      transaction = Transaction.create type: 'Credit', paymentID: params[:txn_id], account_id: @order.user.account.id
-    end
-    render nothing: true
-  end
+  def
+
+  # protect_from_forgery except: [:hook]
+  # def hook
+  #   params.permit! # Permit all Paypal input params
+  #   status = params[:payment_status]
+  #   if status == "Completed"
+  #     @order = Order.find params[:invoice]
+  #     @order.update_attributes status: 'Unassigned'
+  #     @order.user.account.balance += params[:mc_gross]
+  #     transaction = Transaction.create type: 'Credit', paymentID: params[:txn_id], account_id: @order.user.account.id
+  #   end
+  #   render nothing: true
+  # end
 
   private
     # # Use callbacks to share common setup or constraints between actions.
