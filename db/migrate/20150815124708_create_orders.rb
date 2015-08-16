@@ -1,7 +1,7 @@
 class CreateOrders < ActiveRecord::Migration
   def change
     create_table :orders do |t|
-      t.string :status, default: "unassigned"
+      t.string :status, default: "Unpaid"
       t.integer :tips
       t.belongs_to :user, index: true
 

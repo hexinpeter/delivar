@@ -30,6 +30,6 @@ h1 My Orders
         h5
           | Contact:&nbsp;
           = order.deliverer.phone
-        = link_to "Confirm Receiving", '#', class: "btn btn-success"
+        = link_to "Confirm Receiving", confirm_order_path(order), class: "btn btn-success"
       - if order.status == 'unassigned'
         = link_to "Cancel Delivery", '#', class: "btn btn-warning"

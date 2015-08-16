@@ -5,5 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :orders
+  has_one :account
   has_many :deliveries, class_name: 'Order', foreign_key: 'deliverer_id'
 end

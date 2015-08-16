@@ -1,0 +1,17 @@
+<h3>Account Page</h3>
+<p>Balance: <%= @account.balance %></p>
+<p>Transaction:</p>
+<table border="1">
+<tr>
+<td>Type</td>
+<td>Transaction ID</td>
+</tr>
+<% Transaction.all.each do |t| %>
+<% unless t.account.id == @account.id %>
+<tr>
+<td><%= t.type %></td>
+<td><%= t.paymentID %></td>
+<% end %>
+<% end %>
+</tr>
+</table>
