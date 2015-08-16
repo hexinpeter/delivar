@@ -16,6 +16,5 @@
 //= require bootstrap-sprockets
 //= require test
 //= require locationpicker.jquery
-//= require google-maps
 //= require_tree .
 console.log('loaded');
