@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require test
 //= require locationpicker.jquery
 //= require google-maps
 //= require_tree .

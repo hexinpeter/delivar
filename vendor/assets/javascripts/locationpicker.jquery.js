@@ -1,3 +1,5 @@
+console.log('locationpicker load start');
+
 (function ( $ ) {
 
     /**

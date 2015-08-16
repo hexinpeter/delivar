@@ -1,4 +1,4 @@
-
+console.log('google-map load start');
 
 window.google = window.google || {};
 google.maps = google.maps || {};
