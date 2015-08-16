@@ -36,20 +36,17 @@
     = label :location, :latitude_to, class: "col-sm-1"
     div.col-sm-3
       = text_field :location, :latitude_to, class: "form-control deliver-lat", required:true
-  div.checkout
-  
+  div#checkout
   = submit_tag 'Create Order', class: "btn btn-default"
 
 div.hidden id="purchase" style="width: 500px; height: 400px;"
 div.hidden id="deliver" style="width: 500px; height: 400px;"
-<script src="https://js.braintreegateway.com/v2/braintree.js"></script>
 
 
 javascript:
-  braintree.setup("<%= @client_token %>", 'dropin', {
+  braintree.setup( "#{@client_token}", 'dropin', {
         container: 'checkout'
       });
-
   $('#purchase').locationpicker({
     location: {latitude: -37.8239402221389, longitude: 144.9911028355707},
     radius: 3,

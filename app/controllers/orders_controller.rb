@@ -1,10 +1,10 @@
 
 require 'braintree'
 
-  Braintree::Configuration.environment = :sandbox
-  Braintree::Configuration.merchant_id = 'ffdqc9fyffn7yn2j'
-  Braintree::Configuration.public_key = 'qj65nndbnn6qyjkp'
-  Braintree::Configuration.private_key = 'a3de3bb7dddf68ed3c33f4eb6d9579ca'
+Braintree::Configuration.environment = :sandbox
+Braintree::Configuration.merchant_id = 'ffdqc9fyffn7yn2j'
+Braintree::Configuration.public_key = 'qj65nndbnn6qyjkp'
+Braintree::Configuration.private_key = 'a3de3bb7dddf68ed3c33f4eb6d9579ca'
 
 class OrdersController < ApplicationController
   before_filter :authenticate_user!
@@ -46,7 +46,23 @@ class OrdersController < ApplicationController
                                     latitude:  delivery_location_params[:latitude_to],
                                     address:   delivery_location_params[:address_to])
     trip = @order.create_trip(start_location_id: purchase_loc.id, end_location_id: delivery_loc.id)
-    redirect_to pay @order
+
+    result = Braintree::Transaction.sale(
+      amount: @order.items.first.estimated_price.to_i + @order.tips.to_i,
+      payment_method_nonce: params[:payment_method_nonce]
+    )
+
+    if result.success?
+      @transaction = result.transaction
+      p
+      p @transaction.inspect
+      # `say #{@transaction}`
+      # redirect_to user_orders_path
+    else
+      `say Payment failed`
+    end
+
+    redirect_to user_deliveries_path, notice: 'Order was successfully assigned.'
   end
 
   def show
@@ -84,7 +100,7 @@ class OrdersController < ApplicationController
     redirect_to user_orders_path, notice: 'Order was successfully completed'
   end
 
-  def
+  # def
 
   # protect_from_forgery except: [:hook]
   # def hook
