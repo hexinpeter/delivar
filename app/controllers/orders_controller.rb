@@ -26,7 +26,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = current_user.create_order(order_params)
+    @order = current_user.orders.create(order_params)
     @order.items.create(item_params)
     purchase_loc = Location.create(purchase_location_params)
     delivery_loc = Location.create( longitude: delivery_location_params[:longitude_to],
