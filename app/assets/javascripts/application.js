@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
-//= require test
 //= require locationpicker.jquery
 //= require_tree .
 console.log('loaded');
