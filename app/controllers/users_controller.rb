@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   def index
     redirect_to new_user_session_path if !user_signed_in?
     @user = current_user
+    account
   end
 
   def show
@@ -14,12 +15,14 @@ class UsersController < ApplicationController
   def deliveries
     @user = current_user
     @orders = @user.deliveries
+    account
   end
 
 
   def orders
     @user = current_user
     @orders = @user.orders
+    account
   end
 
   def account
