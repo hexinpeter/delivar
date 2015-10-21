@@ -2,6 +2,7 @@ Delivar
 =======
 
 A peer to peer delivery app.
+App available at: [delivar.herokuapp.com](https://delivar.herokuapp.com)
 
 ## Third Party Materials
 * [Bootstrap](http://getbootstrap.com)
